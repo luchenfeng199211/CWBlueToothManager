@@ -39,14 +39,16 @@
 - (void)startSrcBluetooth:(NSInteger)secNum
 {
     //搜索成功之后,会调用我们找到外设的代理方法 services为空则会扫描所有的设备
-    [_centralManager scanForPeripheralsWithServices:nil options:nil];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(secNum * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [_centralManager stopScan];
-        
-        if ([self.delegate respondsToSelector:@selector(srcBluetoothFinished)]) {
-            [self.delegate srcBluetoothFinished];
-        }
-    });
+    if (_centralManager.state == CBManagerStatePoweredOn) {
+        [_centralManager scanForPeripheralsWithServices:nil options:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(secNum * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_centralManager stopScan];
+            
+            if ([self.delegate respondsToSelector:@selector(srcBluetoothFinished)]) {
+                [self.delegate srcBluetoothFinished];
+            }
+        });
+    }
 }
 
 - (void)stopSrcBlueTooth

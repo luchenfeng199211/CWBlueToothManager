@@ -70,10 +70,10 @@
 
 @interface BluetoothManager : NSObject
 
-@property (nonatomic,strong) CBCentralManager *centralManager;
-@property (nonatomic,strong) CBPeripheral *peripheral;
+@property (nonatomic, strong) CBCentralManager              *centralManager;
+@property (nonatomic, strong) CBPeripheral                  *peripheral;
 
-@property (nonatomic,assign) id <BluetoothManagerDelegate> delegate;
+@property (nonatomic, assign) id <BluetoothManagerDelegate> delegate;
 
 + (BluetoothManager *)shareManager;
 
