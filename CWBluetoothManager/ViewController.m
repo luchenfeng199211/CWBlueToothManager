@@ -86,6 +86,51 @@
     NSLog(@"peripheral ===== %@",peripheral);
 }
 
+- (void)CW_CentralManager:(CBCentralManager *)central
+  didDisconnectPeripheral:(CBPeripheral *)peripheral
+                    error:(NSError *)error
+{
+    NSLog(@"设备断开");
+}
+
+- (void)CW_Peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
+{
+    if (error) {
+        NSLog(@"error:%@",error.localizedDescription);
+    }else{
+        for (CBService *service in peripheral.services) {
+            NSLog(@"serviceUUID === %@",service.UUID);
+            [peripheral discoverCharacteristics:nil forService:service];
+        }
+    }
+}
+
+- (void)CW_Peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
+{
+    NSLog(@"%@",service.characteristics);
+    //遍历服务“系统信息”服务中的特征
+    for (CBCharacteristic *curCharacteristic in service.characteristics) {
+        if ([curCharacteristic.UUID isEqual:[CBUUID UUIDWithString:@"2A23"]]) {
+            //获取特征中蓝牙mac地址
+            NSString *value = [NSString stringWithFormat:@"%@",curCharacteristic.value];
+            NSMutableString *macString = [[NSMutableString alloc] init];
+            [macString appendString:[[value substringWithRange:NSMakeRange(16, 2)] uppercaseString]];
+            [macString appendString:@":"];
+            [macString appendString:[[value substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
+            [macString appendString:@":"];
+            [macString appendString:[[value substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
+            [macString appendString:@":"];
+            [macString appendString:[[value substringWithRange:NSMakeRange(5, 2)] uppercaseString]];
+            [macString appendString:@":"];
+            [macString appendString:[[value substringWithRange:NSMakeRange(3, 2)] uppercaseString]];
+            [macString appendString:@":"];
+            [macString appendString:[[value substringWithRange:NSMakeRange(1, 2)] uppercaseString]];
+            NSLog(@"%@",macString);
+            //如果mac地址与二维码上的对不上，断开蓝牙
+        }
+    }
+}
+
 #pragma mark - UITableViewDataSource Delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -109,6 +154,14 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CBPeripheral *peripheral = [self.peripherals objectAtIndex:indexPath.row];
+    [BluetoothManager shareManager].peripheral = peripheral;
+    [[BluetoothManager shareManager].centralManager connectPeripheral:peripheral options:nil];
+    NSLog(@"%@",peripheral);
 }
 
 - (void)didReceiveMemoryWarning {

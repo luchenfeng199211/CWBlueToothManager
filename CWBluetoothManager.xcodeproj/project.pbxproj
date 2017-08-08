@@ -220,7 +220,7 @@
 				TargetAttributes = {
 					1EF6ACF41EE11DD7009F3EEB = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = VD979N5W6T;
+						DevelopmentTeam = 3AE9P4DC7C;
 						ProvisioningStyle = Automatic;
 					};
 					1EF6AD0D1EE11DD7009F3EEB = {
@@ -441,11 +441,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = VD979N5W6T;
+				DEVELOPMENT_TEAM = 3AE9P4DC7C;
 				INFOPLIST_FILE = CWBluetoothManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HealForce.CWBluetoothManager;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MoonMark.CWBluetoothManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -453,11 +454,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = VD979N5W6T;
+				DEVELOPMENT_TEAM = 3AE9P4DC7C;
 				INFOPLIST_FILE = CWBluetoothManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HealForce.CWBluetoothManager;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MoonMark.CWBluetoothManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -530,6 +532,7 @@
 				1EF6AD241EE11DD7009F3EEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1EF6AD251EE11DD7009F3EEB /* Build configuration list for PBXNativeTarget "CWBluetoothManagerTests" */ = {
 			isa = XCConfigurationList;
@@ -538,6 +541,7 @@
 				1EF6AD271EE11DD7009F3EEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1EF6AD281EE11DD7009F3EEB /* Build configuration list for PBXNativeTarget "CWBluetoothManagerUITests" */ = {
 			isa = XCConfigurationList;
@@ -546,6 +550,7 @@
 				1EF6AD2A1EE11DD7009F3EEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

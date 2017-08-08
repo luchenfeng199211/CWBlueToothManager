@@ -108,7 +108,9 @@
 /*设备连接失败*/
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(nullable NSError *)error
 {
-    NSLog(@"设备连接失败");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"设备连接失败");
+    });
 }
 
 /*设备已断开*/
@@ -126,12 +128,8 @@
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(nullable NSError *)error
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (error) {
-            NSLog(@"error:%@",error.localizedDescription);
-        }else{
-            for (CBService *service in peripheral.services) {
-                [peripheral discoverCharacteristics:nil forService:service];
-            }
+        if ([self.delegate respondsToSelector:@selector(CW_Peripheral:didDiscoverServices:)]) {
+            [self.delegate CW_Peripheral:peripheral didDiscoverServices:error];
         }
     });
 }
@@ -139,9 +137,11 @@
 /*发现服务后,让设备再发现服务内部的特征*/
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-    if ([self.delegate respondsToSelector:@selector(CW_Peripheral:didDiscoverCharacteristicsForService:error:)]) {
-        [self.delegate CW_Peripheral:peripheral didDiscoverCharacteristicsForService:service error:error];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(CW_Peripheral:didDiscoverCharacteristicsForService:error:)]) {
+            [self.delegate CW_Peripheral:peripheral didDiscoverCharacteristicsForService:service error:error];
+        }
+    });
 }
 
 /*收到设备发送过来的数据*/
