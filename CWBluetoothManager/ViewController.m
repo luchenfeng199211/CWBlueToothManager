@@ -82,8 +82,10 @@
         advertisementData:(NSDictionary<NSString *,id> *)advertisementData
                      RSSI:(NSNumber *)RSSI
 {
-    [self.peripherals addObject:peripheral];
-    NSLog(@"peripheral ===== %@",peripheral);
+    if ([peripheral.name isEqualToString:@"Xsleep Ble"]) {
+        [self.peripherals addObject:peripheral];
+        NSLog(@"peripheral ===== %@",peripheral);
+    }
 }
 
 - (void)CW_CentralManager:(CBCentralManager *)central
@@ -100,7 +102,7 @@
     }else{
         for (CBService *service in peripheral.services) {
             NSLog(@"serviceUUID === %@",service.UUID);
-            [peripheral discoverCharacteristics:nil forService:service];
+            [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:@"2A23"]] forService:service];
         }
     }
 }
@@ -113,20 +115,24 @@
         if ([curCharacteristic.UUID isEqual:[CBUUID UUIDWithString:@"2A23"]]) {
             //获取特征中蓝牙mac地址
             NSString *value = [NSString stringWithFormat:@"%@",curCharacteristic.value];
-            NSMutableString *macString = [[NSMutableString alloc] init];
-            [macString appendString:[[value substringWithRange:NSMakeRange(16, 2)] uppercaseString]];
-            [macString appendString:@":"];
-            [macString appendString:[[value substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
-            [macString appendString:@":"];
-            [macString appendString:[[value substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
-            [macString appendString:@":"];
-            [macString appendString:[[value substringWithRange:NSMakeRange(5, 2)] uppercaseString]];
-            [macString appendString:@":"];
-            [macString appendString:[[value substringWithRange:NSMakeRange(3, 2)] uppercaseString]];
-            [macString appendString:@":"];
-            [macString appendString:[[value substringWithRange:NSMakeRange(1, 2)] uppercaseString]];
-            NSLog(@"%@",macString);
-            //如果mac地址与二维码上的对不上，断开蓝牙
+            if (value.length > 6) {
+                NSMutableString *macString = [[NSMutableString alloc] init];
+                [macString appendString:[[value substringWithRange:NSMakeRange(16, 2)] uppercaseString]];
+                [macString appendString:@":"];
+                [macString appendString:[[value substringWithRange:NSMakeRange(14, 2)] uppercaseString]];
+                [macString appendString:@":"];
+                [macString appendString:[[value substringWithRange:NSMakeRange(12, 2)] uppercaseString]];
+                [macString appendString:@":"];
+                [macString appendString:[[value substringWithRange:NSMakeRange(5, 2)] uppercaseString]];
+                [macString appendString:@":"];
+                [macString appendString:[[value substringWithRange:NSMakeRange(3, 2)] uppercaseString]];
+                [macString appendString:@":"];
+                [macString appendString:[[value substringWithRange:NSMakeRange(1, 2)] uppercaseString]];
+                NSLog(@"\nmac path ==== %@",macString);
+                //如果mac地址与二维码上的对不上，断开蓝牙
+            } else {
+                NSLog(@"%@",value);
+            }
         }
     }
 }
@@ -148,11 +154,13 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"systemCell"];
         
-        CBPeripheral *peripheral = [self.peripherals objectAtIndex:indexPath.row];
-        cell.textLabel.text = peripheral.name;
-        cell.detailTextLabel.text = peripheral.identifier.UUIDString;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    
+    CBPeripheral *peripheral = [self.peripherals objectAtIndex:indexPath.row];
+    cell.textLabel.text = peripheral.name;
+    cell.detailTextLabel.text = peripheral.identifier.UUIDString;
+    
     return cell;
 }
 

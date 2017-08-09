@@ -12,11 +12,7 @@
 
 @protocol BluetoothManagerDelegate <NSObject>
 
-/****************************************
- * 停止搜索后会进行回调 *
- ****************************************/
-- (void)srcBluetoothFinished;
-
+@required
 /****************************************
  * 蓝牙状态改变后通知外部界面 *
  * CBManagerStateUnknown -- 中心管理器状态未知 *
@@ -27,6 +23,12 @@
  * CBManagerStatePoweredOn -- 中心管理器状态电源开启 *
  ****************************************/
 - (void)CW_CentralManagerDidUpdateState:(CBCentralManager *)central;
+
+@optional
+/****************************************
+ * 停止搜索后会进行回调 *
+ ****************************************/
+- (void)srcBluetoothFinished;
 
 /****************************************
  * 搜索到蓝牙外设后调用 *
